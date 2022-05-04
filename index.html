@@ -25,8 +25,6 @@ var isMovingDown = false;
 var isMovingRight = false;
 var speed = 5;
 
-var newLap = false;
-
 var block;
 
 // Create a score of 0 to start with
@@ -95,23 +93,23 @@ function createPlayer(width, height, x, y) {
     this.go = function() {
         if (isMovingDown) {
             this.y += speed;
+            milesLeft += -.001;
         }
         if (isMovingUp) {
             this.y -= speed;
+            milesLeft += -.001;
         }
         if (isMovingLeft) {
             this.x -= speed;
+            milesLeft += -.001;
         }
         if (isMovingRight) {
             this.x += speed;
+            milesLeft += -.001;
+
         }
     }
-    // this.decrementMiles = function() {
-    //     if (this.x < innerLeftBound)
-    // }
-    // this.newLap = function() {
-    //     if (newLap = false && this.x >
-    // }
+
 }
 
 function createScoreLabel(x, y) {
