@@ -1,0 +1,176 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<style>
+canvas {
+    background: url("half-marathon.svg") no-repeat ;
+}
+</style>
+</head>
+<body onload="startGame()">
+<script>
+
+var canvasWidth = 1400;
+var canvasHeight = 800;
+
+var player;
+
+var interval = setInterval(updateCanvas, 10);
+
+var isMovingLeft = false;
+var isMovingUp = false;
+var isMovingDown = false;
+var isMovingRight = false;
+var speed = 5;
+
+var newLap = false;
+
+var block;
+
+// Create a score of 0 to start with
+var milesLeft = 13.1;
+// Create a variable to hold our scoreLabel
+var scoreLabel;
+
+function startGame() {
+    gameCanvas.start();
+    player = new createPlayer(30, 30, 150, 110);
+    // Assign your scoreLabel variable a value from scoreLabel()
+    scoreLabel = new createScoreLabel(10, 30);
+}
+
+var gameCanvas = {
+    canvas: document.createElement("canvas"),
+
+    start: function() {
+        this.canvas.width = canvasWidth;
+        this.canvas.height = canvasHeight;
+        this.context = this.canvas.getContext("2d");
+        document.body.insertBefore(this.canvas, document.body.childNodes[0]);
+    }
+}
+
+function createPlayer(width, height, x, y) {
+    this.width = width;
+    this.height = height;
+    this.x = x;
+    this.y = y;
+    
+    this.draw = function() {
+        ctx = gameCanvas.context;
+        ctx.fillStyle = "green";
+        ctx.fillRect(this.x, this.y, this.width, this.height);
+    }
+
+    this.stopPlayer = function() {
+        var leftBound = 112;
+        var DownBound = 704-30;
+        var rightBound = 1268-30;
+        var upBound = 67;
+        var innerLeftBound = 211-30;
+        var innerDownBound = 596;
+        var innerRightBound = 1163;
+        var innerUpBound = 176-30;
+        if (this.y < upBound) {
+            isMovingUp = false;
+        }
+        if (this.y > DownBound) {
+            isMovingDown = false;
+        }
+        if (this.x < leftBound) {
+            isMovingLeft = false;
+        }
+        if (this.x > rightBound) {
+            isMovingRight = false;
+        }
+        if (this.y > innerUpBound && this.y < innerDownBound && this.x > innerLeftBound && this.x < innerRightBound) {
+            isMovingLeft = false;
+            isMovingUp = false;
+            isMovingDown = false;
+            isMovingRight = false;
+        }
+    }
+    this.go = function() {
+        if (isMovingDown) {
+            this.y += speed;
+        }
+        if (isMovingUp) {
+            this.y -= speed;
+        }
+        if (isMovingLeft) {
+            this.x -= speed;
+        }
+        if (isMovingRight) {
+            this.x += speed;
+        }
+    }
+    // this.decrementMiles = function() {
+    //     if (this.x < innerLeftBound)
+    // }
+    // this.newLap = function() {
+    //     if (newLap = false && this.x >
+    // }
+}
+
+function createScoreLabel(x, y) {
+    this.x = x;
+    this.y = y;
+    this.draw = function() {
+        ctx = gameCanvas.context;
+        ctx.font = "25px Marker Felt";
+        ctx.fillStyle = "black";
+        ctx.fillText(this.text, this.x, this.y);
+    }
+}
+
+function updateCanvas() {
+    ctx = gameCanvas.context;
+    ctx.clearRect(0, 0, canvasWidth, canvasHeight);
+    
+    player.draw();
+    player.go();
+    player.stopPlayer();
+    // player.decrementMiles();
+    
+    // Redraw your score and update the value
+    scoreLabel.text = "MILES LEFT: " + milesLeft;
+    scoreLabel.draw();
+}
+
+document.body.onkeyup = function(e) {
+    //right
+    if (e.keyCode == 39) {
+        isMovingLeft = false;
+        isMovingUp = false;
+        isMovingDown = false;
+        isMovingRight = true;
+    }
+    //down
+    if (e.keyCode == 40) {
+        isMovingLeft = false;
+        isMovingUp = false;
+        isMovingDown = true;
+        isMovingRight = false;
+    }
+    //left
+    if (e.keyCode == 37) {
+        isMovingLeft = true;
+        isMovingUp = false;
+        isMovingDown = false;
+        isMovingRight = false;
+    }
+    //up
+    if (e.keyCode == 38) {
+        isMovingLeft = false;
+        isMovingUp = true;
+        isMovingDown = false;
+        isMovingRight = false;
+    }
+}
+
+</script>
+<br>
+</body>
+</html>
