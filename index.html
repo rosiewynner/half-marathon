@@ -32,6 +32,8 @@ var milesLeft = 13.1;
 // Create a variable to hold our scoreLabel
 var scoreLabel;
 var finishLabel;
+var finishMessage = '';
+var gameNotOver = true;
 
 function startGame() {
     gameCanvas.start();
@@ -39,6 +41,7 @@ function startGame() {
     // Assign your scoreLabel variable a value from scoreLabel()
     scoreLabel = new createScoreLabel(10, 30);
     finishLabel = new createScoreLabel(200, 30);
+    
 }
 
 var gameCanvas = {
@@ -93,6 +96,23 @@ function createPlayer(width, height, x, y) {
         }
     }
     this.go = function() {
+
+        if (speed == 4) {
+            finishMessage = 'YOU ARE DONE.'
+            speed = 3;
+        }
+        // if (speed === 3) {
+        //     finishMessage = 'WHY ARE YOU STILL MOVING.'
+        //     speed = 2;
+        // }
+        // if (speed === 2) {
+        //     finishMessage = 'ARE YOU NOT TIRED?'
+        //     speed = 1;
+        // }
+        // if (speed === 1) {
+        //     finishMessage = 'REST NOW.'
+        //     speed = 0;
+        // }
         if (isMovingDown) {
             this.y += speed;
             milesLeft += -.001;
@@ -119,8 +139,12 @@ function createPlayer(width, height, x, y) {
             isMovingDown = false;
             isMovingRight = false;
             milesLeft = 0;
-            finishLabel.text = 'YOU DID IT.'
-            finishLabel.draw();
+            finishMessage = 'YOU DID IT.';
+            finishLabel.text = finishMessage;
+            if (gameNotOver) {
+                speed = 4;
+                gameNotOver = false;
+            }
         }
     }
 
@@ -149,6 +173,8 @@ function updateCanvas() {
     // Redraw your score and update the value
     scoreLabel.text = "MILES LEFT: " + milesLeft;
     scoreLabel.draw();
+    finishLabel.text = finishMessage;
+    finishLabel.draw();
 }
 
 document.body.onkeyup = function(e) {
