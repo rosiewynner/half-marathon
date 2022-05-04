@@ -31,12 +31,14 @@ var block;
 var milesLeft = 13.1;
 // Create a variable to hold our scoreLabel
 var scoreLabel;
+var finishLabel;
 
 function startGame() {
     gameCanvas.start();
     player = new createPlayer(30, 30, 150, 110);
     // Assign your scoreLabel variable a value from scoreLabel()
     scoreLabel = new createScoreLabel(10, 30);
+    finishLabel = new createScoreLabel(200, 30);
 }
 
 var gameCanvas = {
@@ -110,6 +112,18 @@ function createPlayer(width, height, x, y) {
         }
     }
 
+    this.win = function() {
+        if (milesLeft <= 0) {
+            isMovingLeft = false;
+            isMovingUp = false;
+            isMovingDown = false;
+            isMovingRight = false;
+            milesLeft = 0;
+            finishLabel.text = 'YOU DID IT.'
+            finishLabel.draw();
+        }
+    }
+
 }
 
 function createScoreLabel(x, y) {
@@ -130,7 +144,7 @@ function updateCanvas() {
     player.draw();
     player.go();
     player.stopPlayer();
-    // player.decrementMiles();
+    player.win();
     
     // Redraw your score and update the value
     scoreLabel.text = "MILES LEFT: " + milesLeft;
